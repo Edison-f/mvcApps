@@ -8,15 +8,19 @@ import java.beans.PropertyChangeListener;
 
 public class AppPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public ControlPanel controls;
+    public ControlPanel controlPanel;
     public View view;
     public Model model;
     public AppFactory factory;
 
     public AppPanel(ControlPanel controls, View view, Model model, AppFactory factory) {
-        this.controls = controls;
+        this.controlPanel = controls;
         this.view = view;
         this.model = model;
+        this.factory = factory;
+    }
+
+    public AppPanel(AppFactory factory) {
         this.factory = factory;
     }
 
@@ -28,6 +32,9 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public void display() {
     }
 
     public class ControlPanel extends JPanel{
