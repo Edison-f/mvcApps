@@ -8,10 +8,10 @@ import java.beans.PropertyChangeListener;
 
 public class AppPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    ControlPanel controls;
-    View view;
-    Model model;
-    AppFactory factory;
+    public ControlPanel controls;
+    public View view;
+    public Model model;
+    public AppFactory factory;
 
     public AppPanel(ControlPanel controls, View view, Model model, AppFactory factory) {
         this.controls = controls;

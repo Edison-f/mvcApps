@@ -1,8 +1,8 @@
 package mvc;
 
 public abstract class Model extends Bean {
-    boolean unsavedChanges;
-    String fileName;
+    public boolean unsavedChanges;
+    public String fileName;
 
     public Model () {
         unsavedChanges = false;
