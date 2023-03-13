@@ -121,11 +121,12 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
         frame.setResizable(false);
     }
 
+    // support function for switching the active model
     public void updateModel(Model model) {
+        model.initSupport();
         // stop listening to old model
         this.model.removePropertyChangeListener(this);
         // update model
-        model.initSupport();
         this.model = model;
         this.model.addPropertyChangeListener(this);
 
