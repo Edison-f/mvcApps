@@ -6,10 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class AppPanel extends JPanel implements ActionListener, PropertyChangeListener {
     public ControlPanel controlPanel;
@@ -18,6 +14,7 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
     public AppFactory factory;
 
     public AppPanel(AppFactory factory) {
+
         this.factory = factory;
         this.controlPanel = new ControlPanel();
         this.model = factory.makeModel();
@@ -54,58 +51,26 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
                 switch (cmmd) {
                     case "Save": {
                         Utilities.save(model, false);
-
-//                        if (model.getFileName() == null) {
-//                            model.setFileName(Utilities.getFileName((String) null, false));
-//                        }
-//                        String fName = model.getFileName();
-//                        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
-//                        os.writeObject(this.model);
-//                        os.close();
                         break;
                     }
 
                     case "SaveAs": {
                         Utilities.save(model, true);
-
-//                        model.setFileName(Utilities.getFileName((String) null, false));
-//                        String fName = model.getFileName();
-//                        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
-//                        os.writeObject(this.model);
-//                        os.close();
                         break;
                     }
 
                     case "Open": {
-
                         Model newModel = Utilities.open(model);
-
-                        if (newModel !=null) {
-                            this.model = newModel;
-                            view.model = this.model;
-                            model.addPropertyChangeListener(this);
-                            model.changed();
+                        if (newModel != null) {
+                            this.updateModel(newModel);
                         }
-
-//                        if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
-//                            model.setFileName(Utilities.getFileName((String) null, false));
-//                            String fName = model.getFileName();
-//                            ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
-//                            model = (Model) is.readObject();
-//                            view.model = model;
-//                            is.close();
-//                        }
-
                         break;
-
                     }
 
                     case "New": {
+                        // TODO check that this works
                         if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
-                            this.model = factory.makeModel();
-                            view.model = this.model;
-                            model.addPropertyChangeListener(this);
-                            model.changed();
+                            this.updateModel(factory.makeModel());
                         }
                         break;
                     }
@@ -145,19 +110,35 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
         this.setLayout((new GridLayout(1, 2)));
         this.add(controlPanel);
         this.add(view);
+
         SafeFrame frame = new SafeFrame();
         Container cp = frame.getContentPane();
         cp.add(this);
         frame.setJMenuBar(this.createMenuBar());
         frame.setTitle(factory.getTitle());
-        frame.setSize(500, 300);
+        frame.setSize(500, 300); // TODO un-hardcode values?
         frame.setVisible(true);
         frame.setResizable(false);
     }
 
-    public class ControlPanel extends JPanel{
+    public void updateModel(Model model) {
+        // stop listening to old model
+        this.model.removePropertyChangeListener(this);
+        // update model
+        model.initSupport();
+        this.model = model;
+        this.model.addPropertyChangeListener(this);
+
+        // make view update
+        view.updateModel(model);
+    }
+
+    public class ControlPanel extends JPanel {
         public ControlPanel() {
-            super();
+            // make control panel pink
+            this.setBackground(Color.PINK);
+
+
         }
     }
 

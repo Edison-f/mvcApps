@@ -4,7 +4,8 @@ public abstract class Model extends Bean {
     public boolean unsavedChanges;
     public String fileName;
 
-    public Model () {
+    public Model() {
+        initSupport(); // initialize mPcs and mVcs
         unsavedChanges = false;
         fileName = null;
     }
