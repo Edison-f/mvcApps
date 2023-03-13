@@ -19,7 +19,7 @@ public class View extends JPanel implements PropertyChangeListener{
         this.model.addPropertyChangeListener(this);
     }
 
-    public void updateModel(Model model) {
+    public void updateModel(Model model) { // called by AppPanel when updating the model, might be bad design -Kyle
         // stop listening to old model
         this.model.removePropertyChangeListener(this);
         // update model
