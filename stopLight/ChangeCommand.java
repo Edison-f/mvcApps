@@ -8,6 +8,7 @@ public class ChangeCommand extends Command {
         super(model);
     }
 
+    @Override
     public void execute() {
         Stoplight light = (Stoplight)model;
         light.change();

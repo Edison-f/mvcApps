@@ -10,7 +10,8 @@ public abstract class Model extends Bean {
     }
 
     public void changed() {
-
+        unsavedChanges = true;
+        firePropertyChange(null, null, null);
     }
 
     public boolean getUnsavedChanges() {
