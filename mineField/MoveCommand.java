@@ -6,4 +6,8 @@ public class MoveCommand extends Command {
     public MoveCommand() {
         super(null);
     }
+
+    public void execute() {
+
+    }
 }

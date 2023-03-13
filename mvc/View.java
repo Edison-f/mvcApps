@@ -2,7 +2,6 @@ package mvc;
 
 import java.awt.*;
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
