@@ -11,11 +11,15 @@ public abstract class View extends JPanel implements PropertyChangeListener{
 
     public View(Model model) {
         this.model = model;
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        if(evt.getPropertyName() == "New"
+                || evt.getPropertyName() == "Open") {
+            model.removePropertyChangeListener(this);
+        }
     }
 
     public void paintComponent(Graphics gc) {
