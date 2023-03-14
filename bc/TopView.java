@@ -11,8 +11,8 @@ public class TopView extends View {
         super.paintComponent(gc);
         Brick brick = (Brick)model;
         Color oldColor = gc.getColor();
-        double x = brick.getWidth();
-        double y = brick.getHeight();
+        double x = brick.getLength();
+        double y = brick.getWidth();
         gc.setColor(Color.BLACK);
         gc.drawString("Top View", 10, 10);
         gc.setColor(Color.RED);

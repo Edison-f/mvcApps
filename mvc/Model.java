@@ -5,14 +5,13 @@ public abstract class Model extends Bean {
     public String fileName;
 
     public Model() {
-        initSupport(); // initialize mPcs and mVcs
         unsavedChanges = false;
         fileName = null;
     }
 
     public void changed() {
         unsavedChanges = true;
-        firePropertyChange(null, null, null);
+        firePropertyChange("ChangesMade", null, null);
     }
 
     public boolean getUnsavedChanges() {

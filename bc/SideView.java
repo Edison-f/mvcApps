@@ -11,7 +11,7 @@ public class SideView extends View {
         super.paintComponent(gc);
         Brick brick = (Brick)model;
         Color oldColor = gc.getColor();
-        double x = brick.getWidth();
+        double x = brick.getLength();
         double y = brick.getHeight();
         gc.setColor(Color.BLACK);
         gc.drawString("Side View", 10, 10);

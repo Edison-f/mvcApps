@@ -19,23 +19,18 @@ public class View extends JPanel implements PropertyChangeListener{
         this.model.addPropertyChangeListener(this);
     }
 
-    public void updateModel(Model model) {
-        // stop listening to old model
-        this.model.removePropertyChangeListener(this);
-        // update model
-        this.model = model;
-        model.addPropertyChangeListener(this);
-
-        // refresh
-        repaint();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName() == "New"
                 || evt.getPropertyName() == "Open") {
+            // change model
+            // stop listening to old model
             model.removePropertyChangeListener(this);
+            // update model
+            model = (Model)evt.getNewValue();
+            model.addPropertyChangeListener(this);
         }
+        this.repaint();
     }
 
     public void paintComponent(Graphics gc) {

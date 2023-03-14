@@ -36,13 +36,23 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        view.repaint();
+        if(evt.getPropertyName() == "New"
+                || evt.getPropertyName() == "Open") {
+            // change model
+            // stop listening to old model
+            model.removePropertyChangeListener(this);
+            // update model
+            model = (Model)evt.getNewValue();
+            model.addPropertyChangeListener(this);
+            // update
+        }
+        this.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         String cmmd = ae.getActionCommand();
-        Command clicked = factory.makeEditCommand(model, cmmd, null);
+        Command clicked = factory.makeEditCommand(model, cmmd, ae.getSource());
         try {
             if (clicked!=null){
                 clicked.execute();
@@ -60,23 +70,26 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
                     }
 
                     case "Open": {
-                        Model newModel = Utilities.open(model);
-                        if (newModel != null) {
-                            this.updateModel(newModel);
+                        // prompts the user to save the current file in Utilities, cannot change this
+                        Model openModel = Utilities.open(model);
+                        if (openModel != null) {
+                            openModel.initSupport();
+                            model.firePropertyChange("Open", model, openModel);
                         }
                         break;
                     }
 
                     case "New": {
-                        // TODO check that this works
-                        if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
-                            this.updateModel(factory.makeModel());
+                        if (!model.getUnsavedChanges() || Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                            Model newModel = factory.makeModel();
+                            newModel.initSupport();
+                            model.firePropertyChange("New", model, newModel);
                         }
                         break;
                     }
 
                     case "Quit": {
-                        if (Utilities.confirm("Are you sure? Unsaved changes will be lost!"))
+                        if (!model.getUnsavedChanges() || Utilities.confirm("Are you sure? Unsaved changes will be lost!"))
                             System.exit(0);
                         break;
                     }
@@ -121,25 +134,10 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
         frame.setResizable(false);
     }
 
-    // support function for switching the active model
-    public void updateModel(Model model) {
-        model.initSupport();
-        // stop listening to old model
-        this.model.removePropertyChangeListener(this);
-        // update model
-        this.model = model;
-        this.model.addPropertyChangeListener(this);
-
-        // make view update
-        view.updateModel(model);
-    }
-
     public class ControlPanel extends JPanel {
         public ControlPanel() {
             // make control panel pink
             this.setBackground(Color.PINK);
-
-
         }
     }
 
