@@ -15,6 +15,6 @@ public class SetWidth extends Command {
             String resp = Utilities.ask("New Value?");
             newValue = Double.parseDouble(resp);
         }
-        brick.setHeight(newValue);
+        brick.setWidth(newValue);
     }
 }

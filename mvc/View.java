@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public abstract class View extends JPanel implements PropertyChangeListener{
+public class View extends JPanel implements PropertyChangeListener{
 
     public Model model;
 

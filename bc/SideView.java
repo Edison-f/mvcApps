@@ -14,7 +14,7 @@ public class SideView extends View {
         double x = brick.getWidth();
         double y = brick.getHeight();
         gc.setColor(Color.BLACK);
-        gc.drawString("Front View", 10, 10);
+        gc.drawString("Side View", 10, 10);
         gc.setColor(Color.RED);
         gc.fillRect(15, 15, (int)x, (int)y);
 
