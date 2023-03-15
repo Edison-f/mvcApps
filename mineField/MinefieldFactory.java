@@ -9,14 +9,15 @@ public class MinefieldFactory implements AppFactory {
 
     @Override
     public Model makeModel() {
-        return null;
+        return new Minefield();
     }
 
     @Override
-    public View makeView(Model m) {
-        return null;
+    public View makeView(Model model) {
+        return new MinefieldView(model);
     }
 
+    // TODO implement MinefieldFactory methods below
     @Override
     public String getTitle() {
         return null;

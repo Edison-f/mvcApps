@@ -1,9 +1,16 @@
 package mineField;
 
-import mvc.View;
+import mvc.*;
+import java.awt.*;
 
 public class MinefieldView extends View {
-    public MinefieldView() {
-        super(null);
+    public MinefieldView(Model model) {
+        super(model);
+    }
+
+    @Override
+    public void paintComponent(Graphics gc) {
+        super.paintComponent(gc);
+        // TODO implement paintComponent
     }
 }
