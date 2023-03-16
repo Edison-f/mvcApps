@@ -14,7 +14,7 @@ public class MinefieldFactory implements AppFactory {
 
     @Override
     public View makeView(Model model) {
-        return new MinefieldView((Minefield)model);
+        return new MinefieldView(model);
     }
 
     @Override
@@ -41,32 +41,32 @@ public class MinefieldFactory implements AppFactory {
 
     @Override
     public Command makeEditCommand(Model model, String type, Object source) {
-        switch(type) {
-            case "NW": {
+        switch (type) {
+            case "NW" -> {
                 return new MoveCommand(model, Heading.NORTHWEST);
             }
-            case "N": {
+            case "N" -> {
                 return new MoveCommand(model, Heading.NORTH);
             }
-            case "NE": {
+            case "NE" -> {
                 return new MoveCommand(model, Heading.NORTHEAST);
             }
-            case "W": {
+            case "W" -> {
                 return new MoveCommand(model, Heading.WEST);
             }
-            case "E": {
+            case "E" -> {
                 return new MoveCommand(model, Heading.EAST);
             }
-            case "SW": {
+            case "SW" -> {
                 return new MoveCommand(model, Heading.SOUTHWEST);
             }
-            case "S": {
+            case "S" -> {
                 return new MoveCommand(model, Heading.SOUTH);
             }
-            case "SE": {
+            case "SE" -> {
                 return new MoveCommand(model, Heading.SOUTHEAST);
             }
-            default: {
+            default -> {
                 return null;
             }
         }

@@ -1,7 +1,6 @@
 package mineField;
 
 import mvc.*;
-import stopLight.Stoplight;
 
 public class MoveCommand extends Command {
     Heading heading; // TODO find a way to use the heading here?

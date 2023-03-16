@@ -1,7 +1,6 @@
 package mineField;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class PatchShape {
     // TODO implement drawing the Patch associated
