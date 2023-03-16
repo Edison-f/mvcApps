@@ -83,18 +83,28 @@ public class Minefield extends Model {
 
     public void movePlayer(int x, int y) {
         playerX += x;
-        if(playerX >= field.length) {
-            playerX = field.length - 1;
+        if(playerX >= fieldSize) {
+            playerX = fieldSize - 1;
         } else if(playerX < 0) {
             playerX = 0;
         }
         playerY += y;
-        if(playerY >= field[0].length) {
-            playerX = field[0].length - 1;
+        if(playerY >= fieldSize) {
+            playerX = fieldSize - 1;
         } else if(playerY < 0) {
             playerY = 0;
         }
 
+    }
+
+    public PatchShape[][] generateShapes() {
+        PatchShape[][] result = new PatchShape[fieldSize][fieldSize];
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
+                result[i][j] = new PatchShape(field[i][j], i, j, 20); // TODO: Replace 20 with some calculated val?
+            }
+        }
+        return  result;
     }
     // TODO implement getters/setters and other important methods
 }

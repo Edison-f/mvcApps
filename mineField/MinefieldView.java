@@ -12,5 +12,16 @@ public class MinefieldView extends View {
     public void paintComponent(Graphics gc) {
         super.paintComponent(gc);
         // TODO implement paintComponent
+        Color oldColor = gc.getColor();
+        Minefield field = (Minefield)model;
+        PatchShape[][] patchShapes = field.generateShapes();
+        for (PatchShape[] inner :
+                patchShapes) {
+            for (PatchShape shape :
+                    inner) {
+                shape.draw((Graphics2D) gc);
+            }
+        }
+        gc.setColor(oldColor);
     }
 }
