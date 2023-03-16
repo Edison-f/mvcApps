@@ -22,6 +22,10 @@ public class Patch implements Serializable {
         hasMine = true;
     }
 
+    public boolean hasMine() {
+        return hasMine;
+    }
+
     public void reveal() {
         isRevealed = true;
         // TODO push an update in the Minefield model that calls this!

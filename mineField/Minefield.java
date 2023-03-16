@@ -7,9 +7,12 @@ public class Minefield extends Model {
     int playerX;
     int playerY;
 
+    boolean isGameOver;
+
     final int fieldSize;
     public static int percentMined = 5; // default percentage of Patches with mines in them
     final int mineCount;
+
 
     public Minefield(int fieldSize) {
         this.fieldSize = fieldSize;
@@ -58,9 +61,10 @@ public class Minefield extends Model {
         }
 
 
-        // init player location
+        // init player location & gamestate
         playerX = 0;
         playerY = 0;
+        isGameOver = false;
     }
 
     // default constructor
@@ -72,6 +76,91 @@ public class Minefield extends Model {
     private boolean isInBounds(int x, int y) {
         return (0 <= x && x < fieldSize) && (0 <= y && y < fieldSize);
     }
+
+    /* Move the player in the given direction. Throws exceptions in the following scenarios:
+     * - when the player moves off the grid
+     * - when the player steps on a mine
+     * - when the player reaches the goal
+     * - when the player attempts to move after the game ends
+     */
+
+    // TODO remove heading input and take in an x and y change, get that from MoveCommand
+    public void movePlayer(Heading heading) throws MinefieldException {
+        // check if game is over
+        if (isGameOver) {
+            throw MinefieldException.create(MinefieldExceptionType.GAME_OVER);
+        }
+
+        // store values
+        int newX = playerX;
+        int newY = playerY;
+
+        // move new pos in heading direction
+        switch (heading) {
+            case NORTH: {
+                newY -= 1;
+                break;
+            }
+            case SOUTH: {
+                newY += 1;
+                break;
+            }
+            case EAST: {
+                newX += 1;
+                break;
+            }
+            case WEST: {
+                newX -= 1;
+                break;
+            }
+            case NORTHWEST: {
+                newX -= 1;
+                newY -= 1;
+                break;
+            }
+            case SOUTHWEST: {
+                newX -= 1;
+                newY += 1;
+                break;
+            }
+            case NORTHEAST: {
+                newX += 1;
+                newY -= 1;
+                break;
+            }
+            case SOUTHEAST: {
+                newX += 1;
+                newY += 1;
+                break;
+            }
+        }
+        // check if in bounds
+        if (isInBounds(newX, newY)) {
+            // movement is in bounds, so do it
+            playerX = newX;
+            playerY = newY;
+            // get stepped on patch
+            Patch steppedPatch = field[playerX][playerY];
+            steppedPatch.reveal(); // reveal it
+            this.firePropertyChange("PlayerMovedSuccessfully", null, null);
+            // check if player moved onto a mine
+            if (steppedPatch.hasMine()) {
+                // player lost
+                throw MinefieldException.create(MinefieldExceptionType.STEPPED_ON_MINE);
+            }
+            // check if player won
+            if (playerX == fieldSize - 1 && playerX == playerY) { // manual check for bottom right tile
+                // player won
+                throw MinefieldException.create(MinefieldExceptionType.WON);
+            }
+        } else {
+            // move is not allowed out of bounds
+            this.firePropertyChange("PlayerMovedUnsuccessful", null, null); // TODO consider, may be unnecessary
+            throw MinefieldException.create(MinefieldExceptionType.MOVED_OUT_OF_BOUNDS);
+        }
+    }
+
+
 
     // TODO implement getters/setters and other important methods
 }
