@@ -17,14 +17,14 @@ public class MoveCommand extends Command {
         Minefield field = (Minefield)model;
 
         switch (heading) {
-            case NORTH -> field.movePlayer(0, 1);
-            case NORTHEAST -> field.movePlayer(1, 1);
+            case NORTH -> field.movePlayer(0, -1);
+            case NORTHEAST -> field.movePlayer(1, -1);
             case EAST -> field.movePlayer(1, 0);
-            case SOUTHEAST -> field.movePlayer(1, -1);
-            case SOUTH -> field.movePlayer(0, -1);
-            case SOUTHWEST -> field.movePlayer(-1, -1);
+            case SOUTHEAST -> field.movePlayer(1, 1);
+            case SOUTH -> field.movePlayer(0, 1);
+            case SOUTHWEST -> field.movePlayer(-1, 1);
             case WEST -> field.movePlayer(-1, 0);
-            case NORTHWEST -> field.movePlayer(-1, 1);
+            case NORTHWEST -> field.movePlayer(-1, -1);
         }
 
     }

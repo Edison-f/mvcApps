@@ -76,7 +76,7 @@ public class Minefield extends Model {
     }
 
     private boolean isSafePatch(int x, int y) {
-        return (x == 0 && y == fieldSize - 1) || (x == fieldSize - 1 && y == 0);
+        return (x == 0 || x == fieldSize - 1) && (x == y);
     }
 
     /* Move the player in the given direction. Throws exceptions in the following scenarios:
@@ -85,8 +85,6 @@ public class Minefield extends Model {
      * - when the player reaches the goal
      * - when the player attempts to move after the game ends
      */
-
-    // TODO remove heading input and take in an x and y change, get that from MoveCommand
     public void movePlayer(int xChange, int yChange) throws MinefieldException {
         // check if game is over
         if (isGameOver) {
@@ -97,6 +95,8 @@ public class Minefield extends Model {
         int newX = playerX + xChange;
         int newY = playerY + yChange;
 
+        // TODO remove debug print
+        System.out.println("moving from " + playerX + "," + playerY + " to " + newX + "," + newY);
         // check if in bounds
         if (isInBounds(newX, newY)) {
             // movement is in bounds, so do it
