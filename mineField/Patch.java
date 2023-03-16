@@ -1,6 +1,5 @@
 package mineField;
 
-import mvc.*; // may be an unnecessary import
 import java.io.Serializable;
 
 public class Patch implements Serializable {
@@ -25,6 +24,14 @@ public class Patch implements Serializable {
     public void reveal() {
         isRevealed = true;
         // TODO push an update in the Minefield model that calls this!
+    }
+
+    public boolean hasMine() {
+        return hasMine;
+    }
+
+    public void setMinesAround(int minesAround) {
+        this.minesAround = minesAround;
     }
 
     // TODO implement helper methods for init/revealing
