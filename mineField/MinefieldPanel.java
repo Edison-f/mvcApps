@@ -21,32 +21,13 @@ public class MinefieldPanel extends AppPanel {
     private JButton SE;
     public MinefieldPanel(AppFactory factory) {
         super(factory);
-        NW = new JButton("NW");
-        N = new JButton("N");
-        NE = new JButton("NE");
-        W = new JButton("W");
-        E = new JButton("E");
-        SW = new JButton("SW");
-        S = new JButton("S");
-        SE = new JButton("SE");
-
-        NW.addActionListener(this);
-        N.addActionListener(this);
-        NE.addActionListener(this);
-        W.addActionListener(this);
-        E.addActionListener(this);
-        SW.addActionListener(this);
-        S.addActionListener(this);
-        SE.addActionListener(this);
-
-        controlPanel.add(NW);
-        controlPanel.add(N);
-        controlPanel.add(NE);
-        controlPanel.add(W);
-        controlPanel.add(E);
-        controlPanel.add(SW);
-        controlPanel.add(S);
-        controlPanel.add(SE);
+        String[] strings = new String[] {"NW", "N", "NE", "W", "E", "SW", "S", "SE"};
+        for (String s :
+                strings) {
+            JButton temp = new JButton(s);
+            temp.addActionListener(this);
+            controlPanel.add(temp);
+        }
 
         controlPanel.setBackground(Color.WHITE);
     }
