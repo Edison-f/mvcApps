@@ -12,7 +12,19 @@ public class Patch implements Serializable {
 
     public Patch() {
         super();
+        isRevealed = false;
+        hasMine = false;
+        minesAround = 0;
         // TODO implement constructor
+    }
+
+    public void placeMine() {
+        hasMine = true;
+    }
+
+    public void reveal() {
+        isRevealed = true;
+        // TODO push an update in the Minefield model that calls this!
     }
 
     // TODO implement helper methods for init/revealing
