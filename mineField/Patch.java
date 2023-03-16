@@ -27,6 +27,14 @@ public class Patch implements Serializable {
         // TODO push an update in the Minefield model that calls this!
     }
 
+    public void setMinesAround(int minesAround) {
+        this.minesAround = minesAround;
+    }
+
+    public void incrementMinesAround() {
+        minesAround++;
+    }
+
     // TODO implement helper methods for init/revealing
 
 }

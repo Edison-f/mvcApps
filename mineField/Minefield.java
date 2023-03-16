@@ -40,8 +40,8 @@ public class Minefield extends Model {
         mineCount = (int)Math.floor(patchCount * percentDouble);
 
         // populate field with mines, excluding top left and bottom right patches (0,0 and fieldSize,fieldSize)
-        int mineToPlace = mineCount;
-        while (mineToPlace > 0) {
+        int minesToPlace = mineCount;
+        while (minesToPlace > 0) {
             // use Utilities rng to choose random mines
             int x = Utilities.rng.nextInt(fieldSize);
             int y = Utilities.rng.nextInt(fieldSize);
@@ -52,7 +52,8 @@ public class Minefield extends Model {
             // if the check is false, place the mine on the valid patch
             if (!onInvalidPatch) {
                 field[x][y].placeMine();
-                mineToPlace--;
+                minesToPlace--;
+                // TODO increment mine count of surrounding patches?
             }
         }
 
@@ -65,6 +66,11 @@ public class Minefield extends Model {
     // default constructor
     public Minefield() {
         this(20);
+    }
+
+    // helper method for determining if the coordinates given are inbounds
+    private boolean isInBounds(int x, int y) {
+        return (0 <= x && x < fieldSize) && (0 <= y && y < fieldSize);
     }
 
     // TODO implement getters/setters and other important methods
