@@ -81,5 +81,20 @@ public class Minefield extends Model {
         return result;
     }
 
+    public void movePlayer(int x, int y) {
+        playerX += x;
+        if(playerX >= field.length) {
+            playerX = field.length - 1;
+        } else if(playerX < 0) {
+            playerX = 0;
+        }
+        playerY += y;
+        if(playerY >= field[0].length) {
+            playerX = field[0].length - 1;
+        } else if(playerY < 0) {
+            playerY = 0;
+        }
+
+    }
     // TODO implement getters/setters and other important methods
 }
