@@ -16,11 +16,15 @@ public class MoveCommand extends Command {
         }
         Minefield field = (Minefield)model;
 
-        // TODO implement MoveCommand's execute, make it throw exceptions if it isn't allowed?
-        switch(heading) {
-            case NORTH: {
-                // waiting to implement the model first and then we can work on moving?
-            }
+        switch (heading) {
+            case NORTH -> field.movePlayer(0, 1);
+            case NORTHEAST -> field.movePlayer(1, 1);
+            case EAST -> field.movePlayer(1, 0);
+            case SOUTHEAST -> field.movePlayer(1, -1);
+            case SOUTH -> field.movePlayer(0, -1);
+            case SOUTHWEST -> field.movePlayer(-1, -1);
+            case WEST -> field.movePlayer(-1, 0);
+            case NORTHWEST -> field.movePlayer(-1, 1);
         }
 
     }

@@ -22,7 +22,7 @@ public class Minefield extends Model {
             for (int j = 0; j < fieldSize; j++) {
                 Patch currentPatch = new Patch();
 
-                // TODO determine if this is the correct rng method
+                // rng method that just randomly places mines as they are generated, number of mines is random
                 /*
                 if (!((i == 0 || i == fieldSize - 1) && (i == j))) { // starting and ending tile check
                     int rng = Utilities.rng.nextInt(100) + 1; // nextInt returns 0 to bound - 1, rng = 1 to bound incl
@@ -36,25 +36,23 @@ public class Minefield extends Model {
         }
 
         // random population method that gives an exact number of mines to place
-        // TODO this might not be the right way to implement this. gonna ask the teacher during class
         // determine probabilistic mine count
         double patchCount = fieldSize * fieldSize;
         double percentDouble = Math.floorDiv(percentMined, 100);
         mineCount = (int)Math.floor(patchCount * percentDouble);
 
         // populate field with mines, excluding top left and bottom right patches (0,0 and fieldSize,fieldSize)
+        // TODO potential issue: code can loop forever if there are more mines than patches available to place
+        // could happen if mineCount > fieldSize^2 - 2 (2 safe tiles)
         int minesToPlace = mineCount;
         while (minesToPlace > 0) {
             // use Utilities rng to choose random mines
             int x = Utilities.rng.nextInt(fieldSize);
             int y = Utilities.rng.nextInt(fieldSize);
-
-            // if x and y are 0, it tried to place a mine on the spawn patch
-            // if x and y are fieldSize - 1, it tried to place a mine on the end patch
-            boolean onInvalidPatch = ((x == 0 || x == fieldSize - 1) && x == y);
-            // if the check is false, place the mine on the valid patch
-            if (!onInvalidPatch) {
-                field[x][y].placeMine();
+            Patch currentPatch = field[x][y];
+            // check if the current patch doesn't have a mine on it, and that it isn't the start/end safe patches
+            if (!(currentPatch.hasMine() || isSafePatch(x,y))) {
+                currentPatch.placeMine();
                 minesToPlace--;
                 // TODO increment mine count of surrounding patches?
             }
@@ -77,6 +75,10 @@ public class Minefield extends Model {
         return (0 <= x && x < fieldSize) && (0 <= y && y < fieldSize);
     }
 
+    private boolean isSafePatch(int x, int y) {
+        return (x == 0 && y == fieldSize - 1) || (x == fieldSize - 1 && y == 0);
+    }
+
     /* Move the player in the given direction. Throws exceptions in the following scenarios:
      * - when the player moves off the grid
      * - when the player steps on a mine
@@ -85,55 +87,16 @@ public class Minefield extends Model {
      */
 
     // TODO remove heading input and take in an x and y change, get that from MoveCommand
-    public void movePlayer(Heading heading) throws MinefieldException {
+    public void movePlayer(int xChange, int yChange) throws MinefieldException {
         // check if game is over
         if (isGameOver) {
             throw MinefieldException.create(MinefieldExceptionType.GAME_OVER);
         }
 
-        // store values
-        int newX = playerX;
-        int newY = playerY;
+        // store new values
+        int newX = playerX + xChange;
+        int newY = playerY + yChange;
 
-        // move new pos in heading direction
-        switch (heading) {
-            case NORTH: {
-                newY -= 1;
-                break;
-            }
-            case SOUTH: {
-                newY += 1;
-                break;
-            }
-            case EAST: {
-                newX += 1;
-                break;
-            }
-            case WEST: {
-                newX -= 1;
-                break;
-            }
-            case NORTHWEST: {
-                newX -= 1;
-                newY -= 1;
-                break;
-            }
-            case SOUTHWEST: {
-                newX -= 1;
-                newY += 1;
-                break;
-            }
-            case NORTHEAST: {
-                newX += 1;
-                newY -= 1;
-                break;
-            }
-            case SOUTHEAST: {
-                newX += 1;
-                newY += 1;
-                break;
-            }
-        }
         // check if in bounds
         if (isInBounds(newX, newY)) {
             // movement is in bounds, so do it
