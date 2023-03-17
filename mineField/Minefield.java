@@ -1,8 +1,6 @@
 package mineField;
 import mvc.*;
 
-import java.awt.*;
-
 public class Minefield extends Model {
 
     Patch[][] field;
@@ -11,13 +9,13 @@ public class Minefield extends Model {
 
     boolean isGameOver;
 
-    final int fieldSize;
+    public final int FIELD_SIZE;
     public static int percentMined = 5; // default percentage of Patches with mines in them
     final int mineCount;
 
 
     public Minefield(int fieldSize) {
-        this.fieldSize = fieldSize;
+        this.FIELD_SIZE = fieldSize;
         field = new Patch[fieldSize][fieldSize];
         // initialize field patches
         for (int i = 0; i < fieldSize; i++) {
@@ -80,11 +78,11 @@ public class Minefield extends Model {
 
     // helper method for determining if the coordinates given are inbounds
     private boolean isInBounds(int x, int y) {
-        return (0 <= x && x < fieldSize) && (0 <= y && y < fieldSize);
+        return (0 <= x && x < FIELD_SIZE) && (0 <= y && y < FIELD_SIZE);
     }
 
     private boolean isSafePatch(int x, int y) {
-        return (x == 0 || x == fieldSize - 1) && (x == y);
+        return (x == 0 || x == FIELD_SIZE - 1) && (x == y);
     }
 
     // Increment all surrounding Patch mineCounts by 1 at an x,y. Called when a mine is placed
@@ -116,8 +114,6 @@ public class Minefield extends Model {
         int newX = playerX + xChange;
         int newY = playerY + yChange;
 
-        // TODO remove debug print
-        System.out.println("moving from " + playerX + "," + playerY + " to " + newX + "," + newY);
         // check if in bounds
         if (isInBounds(newX, newY)) {
             // movement is in bounds, so do it
@@ -127,8 +123,6 @@ public class Minefield extends Model {
             Patch steppedPatch = field[playerX][playerY];
             steppedPatch.reveal(); // reveal it
             changed(); // lets the system know the model is changed
-            this.firePropertyChange("PlayerMovedSuccessfully", null, null);
-            System.out.println("current patch has " + steppedPatch.getMinesAround() + " mines around it"); // TODO remove debug print
 
             // check if player moved onto a mine
             if (steppedPatch.hasMine()) {
@@ -137,7 +131,7 @@ public class Minefield extends Model {
                 throw MinefieldException.create(MinefieldExceptionType.STEPPED_ON_MINE);
             }
             // check if player won
-            if (playerX == fieldSize - 1 && playerX == playerY) { // manual check for bottom right tile
+            if (playerX == FIELD_SIZE - 1 && playerX == playerY) { // manual check for bottom right tile
                 // player won
                 this.isGameOver = true;
                 throw MinefieldException.create(MinefieldExceptionType.WON);
@@ -160,6 +154,10 @@ public class Minefield extends Model {
     }
     public int getPlayerY() {
         return playerY;
+    }
+
+    public Patch[][] getField() {
+        return field;
     }
 
 }
