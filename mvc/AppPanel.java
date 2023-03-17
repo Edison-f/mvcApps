@@ -36,13 +36,13 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName() == "New"
+        if (evt.getPropertyName() == "New"
                 || evt.getPropertyName() == "Open") {
             // change model
             // stop listening to old model
             model.removePropertyChangeListener(this);
             // update model
-            model = (Model)evt.getNewValue();
+            model = (Model) evt.getNewValue();
             model.addPropertyChangeListener(this);
             // update
         }
@@ -54,10 +54,9 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
         String cmmd = ae.getActionCommand();
         Command clicked = factory.makeEditCommand(model, cmmd, ae.getSource());
         try {
-            if (clicked!=null){
+            if (clicked != null) {
                 clicked.execute();
-            }
-            else {
+            } else {
                 switch (cmmd) {
                     case "Save": {
                         Utilities.save(model, false);
@@ -129,9 +128,8 @@ public class AppPanel extends JPanel implements ActionListener, PropertyChangeLi
         cp.add(this);
         frame.setJMenuBar(this.createMenuBar());
         frame.setTitle(factory.getTitle());
-        frame.setSize(500, 300); // TODO un-hardcode values?
+        frame.setSize(1000, 600); // TODO un-hardcode values?
         frame.setVisible(true);
-        frame.setResizable(false);
     }
 
     public class ControlPanel extends JPanel {

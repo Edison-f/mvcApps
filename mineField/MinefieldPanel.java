@@ -4,16 +4,18 @@ import mvc.*;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
-// TODO trim down imports if they're unnecessary, copied them from other code
 
 public class MinefieldPanel extends AppPanel {
 
     public MinefieldPanel(AppFactory factory) {
         super(factory);
-        String[] strings = new String[] {"NW", "N", "NE", "W", "E", "SW", "S", "SE"};
+        String[] strings = new String[] {"NW", "N", "NE", "W", "", "E", "SW", "S", "SE"};
+        controlPanel.setLayout(new GridLayout(3,3));
         for (String s :
                 strings) {
             JButton temp = new JButton(s);
+            JPanel tempPanel = new JPanel();
+            tempPanel.add(temp);
             temp.addActionListener(this);
             controlPanel.add(temp);
         }
@@ -24,7 +26,7 @@ public class MinefieldPanel extends AppPanel {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
-        // TODO handle property changes
+        // TODO handle property changes and special exceptions?
     }
 
 
