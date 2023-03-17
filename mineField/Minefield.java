@@ -1,6 +1,8 @@
 package mineField;
 import mvc.*;
 
+import java.awt.*;
+
 public class Minefield extends Model {
 
     Patch[][] field;
@@ -39,11 +41,11 @@ public class Minefield extends Model {
         // determine probabilistic mine count
         double patchCount = fieldSize * fieldSize;
         double percentDouble = (double)percentMined / 100.0;
-        mineCount = (int)Math.floor(patchCount * percentDouble); // TODO code might be faulty
-        System.out.println("debug math: " + patchCount + "," + percentDouble + "," + mineCount);
+        mineCount = (int)Math.floor(patchCount * percentDouble);
 
         // populate field with mines, excluding top left and bottom right patches (0,0 and fieldSize,fieldSize)
         // TODO potential issue: code can loop forever if there are more mines than patches available to place
+        // TODO this code may be inefficient for high numbers of mines, since it just keeps picking randomly until it finds a working spot
         // could happen if mineCount > fieldSize^2 - 2 (2 safe tiles)
         int minesToPlace = mineCount;
         while (minesToPlace > 0) {
@@ -54,17 +56,18 @@ public class Minefield extends Model {
             // check if the current patch doesn't have a mine on it, and that it isn't the start/end safe patches
             if (!(currentPatch.hasMine() || isSafePatch(x,y))) {
                 currentPatch.placeMine();
-                System.out.println("placing mine at " + x + "," + y);
+                incrementSurroundingPatches(x,y);
                 minesToPlace--;
-                // TODO increment mine count of surrounding patches?
             }
         }
-
 
         // init player location & gamestate
         playerX = 0;
         playerY = 0;
         isGameOver = false;
+        // reveal starting tile
+        field[0][0].reveal();
+        System.out.println("current patch has " + field[0][0].getMinesAround() + " mines around it");
     }
 
     // default constructor
@@ -79,6 +82,18 @@ public class Minefield extends Model {
 
     private boolean isSafePatch(int x, int y) {
         return (x == 0 || x == fieldSize - 1) && (x == y);
+    }
+
+    // Increment all surrounding Patch mineCounts by 1 at an x,y. Called when a mine is placed
+    private void incrementSurroundingPatches(int x, int y) {
+        if (isInBounds(x, y-1)) field[x][y-1].incrementMinesAround(); // NORTH
+        if (isInBounds(x+1, y-1)) field[x+1][y-1].incrementMinesAround(); // NORTHEAST
+        if (isInBounds(x+1, y)) field[x+1][y].incrementMinesAround(); // EAST
+        if (isInBounds(x+1, y+1)) field[x+1][y+1].incrementMinesAround(); // SOUTHEAST
+        if (isInBounds(x, y+1)) field[x][y+1].incrementMinesAround(); // SOUTH
+        if (isInBounds(x-1, y+1)) field[x-1][y+1].incrementMinesAround(); // SOUTHWEST
+        if (isInBounds(x-1, y)) field[x-1][y].incrementMinesAround(); // WEST
+        if (isInBounds(x-1, y-1)) field[x-1][y-1].incrementMinesAround(); // NORTHWEST
     }
 
     /* Move the player in the given direction. Throws exceptions in the following scenarios:
@@ -109,6 +124,8 @@ public class Minefield extends Model {
             Patch steppedPatch = field[playerX][playerY];
             steppedPatch.reveal(); // reveal it
             this.firePropertyChange("PlayerMovedSuccessfully", null, null);
+            System.out.println("current patch has " + steppedPatch.getMinesAround() + " mines around it"); // TODO remove debug print
+
             // check if player moved onto a mine
             if (steppedPatch.hasMine()) {
                 // player lost
@@ -131,4 +148,12 @@ public class Minefield extends Model {
 
 
     // TODO implement getters/setters and other important methods
+
+    public int getPlayerX() {
+        return playerX;
+    }
+    public int getPlayerY() {
+        return playerY;
+    }
+
 }
