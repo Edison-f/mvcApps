@@ -38,8 +38,9 @@ public class Minefield extends Model {
         // random population method that gives an exact number of mines to place
         // determine probabilistic mine count
         double patchCount = fieldSize * fieldSize;
-        double percentDouble = Math.floorDiv(percentMined, 100);
-        mineCount = (int)Math.floor(patchCount * percentDouble);
+        double percentDouble = (double)percentMined / 100.0;
+        mineCount = (int)Math.floor(patchCount * percentDouble); // TODO code might be faulty
+        System.out.println("debug math: " + patchCount + "," + percentDouble + "," + mineCount);
 
         // populate field with mines, excluding top left and bottom right patches (0,0 and fieldSize,fieldSize)
         // TODO potential issue: code can loop forever if there are more mines than patches available to place
@@ -53,6 +54,7 @@ public class Minefield extends Model {
             // check if the current patch doesn't have a mine on it, and that it isn't the start/end safe patches
             if (!(currentPatch.hasMine() || isSafePatch(x,y))) {
                 currentPatch.placeMine();
+                System.out.println("placing mine at " + x + "," + y);
                 minesToPlace--;
                 // TODO increment mine count of surrounding patches?
             }
@@ -88,6 +90,7 @@ public class Minefield extends Model {
     public void movePlayer(int xChange, int yChange) throws MinefieldException {
         // check if game is over
         if (isGameOver) {
+            // don't let the player move
             throw MinefieldException.create(MinefieldExceptionType.GAME_OVER);
         }
 
@@ -109,11 +112,13 @@ public class Minefield extends Model {
             // check if player moved onto a mine
             if (steppedPatch.hasMine()) {
                 // player lost
+                this.isGameOver = true;
                 throw MinefieldException.create(MinefieldExceptionType.STEPPED_ON_MINE);
             }
             // check if player won
             if (playerX == fieldSize - 1 && playerX == playerY) { // manual check for bottom right tile
                 // player won
+                this.isGameOver = true;
                 throw MinefieldException.create(MinefieldExceptionType.WON);
             }
         } else {
