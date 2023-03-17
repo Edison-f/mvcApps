@@ -2,83 +2,105 @@ package mineField;
 
 import mvc.*;
 
+import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 
 public class MinefieldView extends View {
 
     private static final int PATCH_SIZE = 20;
+    private final int fieldSize;
+    private Cell[][] cells;
 
     public MinefieldView(Minefield field) {
         super(field);
-        this.setLayout(new GridLayout(field.FIELD_SIZE, field.FIELD_SIZE));
-        this.setPreferredSize(new Dimension(field.FIELD_SIZE*PATCH_SIZE, field.FIELD_SIZE*PATCH_SIZE));
+        fieldSize = field.FIELD_SIZE;
+        Patch[][] patches = field.getField();
+        cells = new Cell[fieldSize][fieldSize];
+        this.setLayout(new GridLayout(fieldSize, fieldSize));
+        this.setPreferredSize(new Dimension(fieldSize*PATCH_SIZE, fieldSize*PATCH_SIZE));
+
+        // initialize cells
+        for (int y = 0; y < fieldSize; y++) {
+            for (int x = 0; x < fieldSize; x++) {
+                Cell c = new Cell(patches[x][y]);
+                this.add(c);
+                cells[x][y] = c;
+                c.updateCell();
+            }
+        }
+    }
+
+    // Updates all cells to the current model.
+    private void updateCells() {
+        Minefield field = (Minefield)model;
+        for (Cell[] row : cells) {
+            for (Cell c : row) {
+                c.updateCell();
+            }
+        }
+        cells[field.getPlayerX()][field.getPlayerY()].setWhiteBorder();
+    }
+
+    public void changeModel() {
+        Minefield field = (Minefield)model;
+        for (int x = 0; x < fieldSize; x++) {
+            for (int y = 0; y < fieldSize; y++) {
+                cells[x][y].setPatch(field.getPatch(x,y));
+                cells[x][y].updateCell();
+            }
+        }
+        cells[field.getPlayerX()][field.getPlayerY()].setWhiteBorder();
     }
 
     @Override
-    public void paintComponent(Graphics gc) {
-        super.paintComponent(gc);
-        Minefield field = (Minefield)model;
-        Color oldColor = gc.getColor();
-
-        // get field
-        Patch[][] patches = field.getField();
-
-        // draw current field
-        for (int x = 0; x < field.FIELD_SIZE; x++) {
-            for (int y = 0; y < field.FIELD_SIZE; y++) {
-                Cell cell = new Cell(patches[x][y], x, y, PATCH_SIZE, field);
-                cell.draw((Graphics2D)gc);
-            }
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+        if(evt.getPropertyName() == "New"
+                || evt.getPropertyName() == "Open") {
+            // update all cells to new model
+            changeModel();
+        } else {
+            updateCells();
         }
-        gc.setColor(oldColor);
     }
 
-    class Cell {
+    class Cell extends JPanel {
         private Patch patch;
-        private int xc, yc, width;
-        private Color fillColor = Color.GRAY;
-        private Color outlineColor = Color.BLACK;
-        private String text = "?";
+        private JLabel label;
 
-        private final int TEXT_OFFSET = 1;
-
-        public Cell(Patch patch, int x, int y, int width, Minefield field) {
+        public Cell(Patch patch) {
+            super();
             this.patch = patch;
-            this.xc = x * width;
-            this.yc = y * width;
-            this.width = width;
-            // determine text in cell
-            if (patch.isRevealed()) {
-                if (patch.hasMine()) {
-                    fillColor = Color.RED;
-                    text = "";
-                } else {
-                    fillColor = Color.LIGHT_GRAY;
-                    text = "" + patch.getMinesAround();
-                }
-            }
-            // determine outline color
-            if (x == field.FIELD_SIZE - 1 && x == y) {
-                outlineColor = Color.GREEN;
-                if (field.getPlayerX() == x && field.getPlayerY() == y) {
-                    fillColor = Color.GREEN;
-                }
-            }
-            if (x == field.getPlayerX() && y == field.getPlayerY()) {
-                outlineColor = Color.WHITE;
-            }
+            this.label = new JLabel();
+            add(label);
+            updateCell();
         }
 
-        public void draw(Graphics2D gc) {
-            Color oldColor = gc.getColor();
-            // draw square and outline
-            gc.setColor(fillColor);
-            gc.fillRect(xc, yc, width, width);
-            gc.setColor(outlineColor);
-            gc.drawRect(xc, yc, width, width);
-            gc.setColor(Color.BLACK);
-            gc.drawString(text, xc + TEXT_OFFSET, yc + width - TEXT_OFFSET);
-            gc.setColor(oldColor);
+        public void setPatch(Patch patch) {
+            this.patch = patch;
+        }
+
+        public void updateCell() {
+            String newText = "";
+            if (patch.isRevealed()) {
+                if (patch.hasMine()) {
+                    setBackground(Color.RED);
+                } else {
+                    newText = "" + patch.getMinesAround();
+                    if (patch.isGoal()) setBackground(Color.GREEN);
+                    else setBackground(Color.LIGHT_GRAY);
+                }
+            } else {
+                newText = "?";
+                setBackground(Color.GRAY);
+            }
+            setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            label.setText(newText);
+        }
+
+        public void setWhiteBorder() {
+            setBorder(BorderFactory.createLineBorder(Color.WHITE));
         }
 
     }
