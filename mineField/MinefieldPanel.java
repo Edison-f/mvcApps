@@ -51,11 +51,11 @@ public class MinefieldPanel extends AppPanel {
         controlPanel.setBackground(Color.WHITE);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        super.propertyChange(evt);
-        // TODO handle property changes and special exceptions?
-    }
+//    @Override
+//    public void propertyChange(PropertyChangeEvent evt) {
+//        super.propertyChange(evt);
+//        // TODO handle property changes and special exceptions?
+//    }
 
 
     public static void main(String[] args) {

@@ -9,13 +9,28 @@ public class Patch implements Serializable {
     private boolean isRevealed;
     private boolean hasMine; // change these names if something makes more sense
     private int minesAround;
+    private boolean isGoal; // for the goal
+    private int x;
+    private int y;
 
-    public Patch() {
+    public Patch(int x, int y) {
         super();
         isRevealed = false;
         hasMine = false;
         minesAround = 0;
+        this.x = x;
+        this.y = y;
         // TODO implement constructor
+    }
+
+    public Patch(int x, int y, boolean isGoal) {
+        super();
+        isRevealed = false;
+        hasMine = false;
+        minesAround = 0;
+        this.x = x;
+        this.y = y;
+        this.isGoal = isGoal;
     }
 
     public void placeMine() {
@@ -26,9 +41,15 @@ public class Patch implements Serializable {
         return hasMine;
     }
 
+    public boolean isGoal() {return isGoal;}
+
     public void reveal() {
         isRevealed = true;
         // TODO push an update in the Minefield model that calls this!
+    }
+
+    public boolean isRevealed() {
+        return isRevealed;
     }
 
     public int getMinesAround() {
@@ -40,5 +61,9 @@ public class Patch implements Serializable {
     }
 
     // TODO implement helper methods for init/revealing
+
+    public int getX() { return x; }
+
+    public int getY() { return y; }
 
 }

@@ -22,7 +22,10 @@ public class Minefield extends Model {
         // initialize field patches
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
-                Patch currentPatch = new Patch();
+                Patch currentPatch = new Patch(i, j);
+                if (i == fieldSize-1 && j == fieldSize-1) {
+                    currentPatch = new Patch(i, j, true);
+                }
 
                 // rng method that just randomly places mines as they are generated, number of mines is random
                 /*
@@ -123,6 +126,7 @@ public class Minefield extends Model {
             // get stepped on patch
             Patch steppedPatch = field[playerX][playerY];
             steppedPatch.reveal(); // reveal it
+            changed(); // lets the system know the model is changed
             this.firePropertyChange("PlayerMovedSuccessfully", null, null);
             System.out.println("current patch has " + steppedPatch.getMinesAround() + " mines around it"); // TODO remove debug print
 
@@ -145,7 +149,9 @@ public class Minefield extends Model {
         }
     }
 
-
+    public Patch getPatch(int x, int y) {
+        return field[x][y];
+    }
 
     // TODO implement getters/setters and other important methods
 
