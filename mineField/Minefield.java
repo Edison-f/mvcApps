@@ -68,7 +68,6 @@ public class Minefield extends Model {
         isGameOver = false;
         // reveal starting tile
         field[0][0].reveal();
-        System.out.println("current patch has " + field[0][0].getMinesAround() + " mines around it");
     }
 
     // default constructor
@@ -138,7 +137,7 @@ public class Minefield extends Model {
             }
         } else {
             // move is not allowed out of bounds
-            this.firePropertyChange("PlayerMovedUnsuccessful", null, null); // TODO consider, may be unnecessary
+            this.firePropertyChange("PlayerMoveUnsuccessful", null, null); // TODO consider, may be unnecessary
             throw MinefieldException.create(MinefieldExceptionType.MOVED_OUT_OF_BOUNDS);
         }
     }
