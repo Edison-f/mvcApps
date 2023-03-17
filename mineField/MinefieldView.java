@@ -53,12 +53,13 @@ public class MinefieldView extends View {
         cells[field.getPlayerX()][field.getPlayerY()].setWhiteBorder();
     }
 
+    /*
     @Override
     public void paintComponent(Graphics gc) {
         super.paintComponent(gc);
         // TODO implement paintComponent
         Color oldColor = gc.getColor();
-        Minefield field = (Minefield)model;
+        Minefield field = (Minefield) model;
         PatchShape[][] patchShapes = field.generateShapes();
         for (PatchShape[] inner :
                 patchShapes) {
@@ -68,6 +69,11 @@ public class MinefieldView extends View {
             }
         }
         gc.setColor(oldColor);
+    }
+    */
+
+
+
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
         if(evt.getPropertyName() == "New"

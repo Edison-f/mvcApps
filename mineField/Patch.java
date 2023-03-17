@@ -50,6 +50,7 @@ public class Patch implements Serializable {
     public boolean isRevealed() {
         return isRevealed;
     }
+    public void setMinesAround(int n) {minesAround = n;}
 
     public int getMinesAround() {
         return minesAround;

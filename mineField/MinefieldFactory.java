@@ -14,7 +14,7 @@ public class MinefieldFactory implements AppFactory {
 
     @Override
     public View makeView(Model model) {
-        return new MinefieldView(model);
+        return new MinefieldView((Minefield) model);
     }
 
     @Override

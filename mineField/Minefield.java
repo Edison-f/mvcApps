@@ -5,7 +5,6 @@ import mvc.*;
 public class Minefield extends Model {
 
     public static int percentMined = 5; // default percentage of Patches with mines in them
-    final int fieldSize;
     final int mineCount;
     Patch[][] field;
     int playerX;
@@ -57,11 +56,11 @@ public class Minefield extends Model {
             // check if the current patch doesn't have a mine on it, and that it isn't the start/end safe patches
             if (!(currentPatch.hasMine() || isSafePatch(x,y))) {
                 currentPatch.placeMine();
-                // incrementSurroundingPatches(x,y);
+                 incrementSurroundingPatches(x,y);
                 minesToPlace--;
             }
         }
-        generateAdjacentMines(); // Or use incrementSurroundingPatches(x,y);
+//        generateAdjacentMines(); // Or use incrementSurroundingPatches(x,y);
 
         // init player location & gamestate
         playerX = 0;
