@@ -23,12 +23,7 @@ public class Patch implements Serializable {
     }
 
     public Patch(int x, int y, boolean isGoal) {
-        super();
-        isRevealed = false;
-        hasMine = false;
-        minesAround = 0;
-        this.x = x;
-        this.y = y;
+        this(x, y);
         this.isGoal = isGoal;
     }
 

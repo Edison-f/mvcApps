@@ -103,6 +103,7 @@ public class MinefieldView extends View {
 
         public void updateCell() {
             String newText = "";
+            setBorder(BorderFactory.createLineBorder(Color.BLACK));
             if (patch.isRevealed()) {
                 if (patch.hasMine()) {
                     setBackground(Color.RED);
@@ -114,8 +115,8 @@ public class MinefieldView extends View {
             } else {
                 newText = "?";
                 setBackground(Color.GRAY);
+                if (patch.isGoal()) setBorder(BorderFactory.createLineBorder(Color.GREEN));
             }
-            setBorder(BorderFactory.createLineBorder(Color.BLACK));
             label.setText(newText);
         }
 
